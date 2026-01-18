@@ -2,7 +2,7 @@ import asyncio
 from droidrun import DroidAgent, DroidrunConfig, AgentConfig
 from llama_index.llms.google_genai import GoogleGenAI
 from dotenv import load_dotenv
-from entities.reviews import RawReviewList
+from entities.customer_reviews import RawReviewList
 from prompts.reviews import fetch_reviews_chrome
 
 load_dotenv()
