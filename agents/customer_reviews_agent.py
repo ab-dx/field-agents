@@ -8,7 +8,7 @@ from prompts.reviews import fetch_reviews_app
 load_dotenv()
 
 config = DroidrunConfig(AgentConfig(reasoning=True, max_steps=100))
-llm = GoogleGenAI(model="models/gemini-2.5-pro", temperature=0.8)
+llm = GoogleGenAI(model="models/gemini-2.5-flash", temperature=0.8)
 
 Reddit_agent = DroidAgent(
     goal=fetch_reviews_app("Neural DSP", "reddit"),

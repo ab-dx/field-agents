@@ -1,5 +1,5 @@
 review_template = """
-**TASK**: Collect maximum customer reviews for "%s" on %s
+TASK: Collect maximum customer reviews for "{app}" on {platform}
 
 **REQUIREMENTS**:
 1. **MAXIMIZE COVERAGE**: Fetch 5-100 reviews (prioritize most recent)
@@ -9,11 +9,36 @@ review_template = """
 5. **MINIMUM ALTERATION**: Return review content as is, or with negligible modifications if required.
 """
 
-def fetch_reviews_chrome(target, source):
-    return review_template % (target, f"chrome via {source} website")
+def fetch_reviews_reddit(app: str) -> str:
+    return review_template.format(app=app, platform="Reddit app") + """
+- Capture upvotes if visible
+"""
 
-def fetch_reviews_app(target, source):
-    return review_template % (target, f"{source} app")
+def fetch_reviews_x(app: str) -> str:
+    return review_template.format(app=app, platform="X (Twitter) app") + """
+- Prefer recent posts
+- Capture likes/reposts/replies if visible
+"""
+
+def fetch_reviews_playstore(app: str) -> str:
+    return review_template.format(app=app, platform="Google Play Store app") + """
+- Also collect app-level stats:
+  1) total number of reviews
+  2) number of downloads/installs (the range shown)
+  3) overall app rating
+- Capture star rating for each review if visible
+"""
+
+def fetch_reviews_app(app: str, platform: str) -> str:
+    platform = platform.lower().strip()
+    if platform == "reddit":
+        return fetch_reviews_reddit(app)
+    if platform == "playstore":
+        return fetch_reviews_playstore(app)
+    if platform == "x":
+        return fetch_reviews_x(app)
+    raise ValueError("platform must be: reddit | playstore | x")
+
 
 if __name__ == "__main__":
-    print(fetch_reviews_chrome("a","b"))
+    print(fetch_reviews_playstore("Neural DSP"))
