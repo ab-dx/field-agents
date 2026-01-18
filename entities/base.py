@@ -55,10 +55,6 @@ class RawReviewList(BaseModel):
     negative_reviews: List[RawReview] = Field(
         description="1-3 star reviews (sentiment_score < -0.3)"
     )
-    
-    total_reviews_count: int = Field(gt=4, le=100)
-    positive_reviews_count: int = Field(ge=0)
-    negative_reviews_count: int = Field(ge=0)
     sentiment_score: float = Field(ge=-1, le=1)
     
     critical_issues: int = Field(ge=0)
@@ -66,37 +62,6 @@ class RawReviewList(BaseModel):
     
     computed_at: datetime = Field(default_factory=datetime.now)
     
-    @field_validator("total_reviews_count")
-    @classmethod
-    def validate_total_count(cls, v, values):
-        """total_reviews_count == len(positive) + len(negative)"""
-        pos_count = len(values.get("positive_reviews", []))
-        neg_count = len(values.get("negative_reviews", []))
-        expected = pos_count + neg_count
-        
-        if v != expected:
-            raise ValueError(
-                f"total_reviews_count {v} doesn't match actual {expected} reviews"
-            )
-        return v
-    
-    @field_validator("positive_reviews_count")
-    @classmethod
-    def validate_positive_count(cls, v, values):
-        """positive_reviews_count == len(positive_reviews)"""
-        actual = len(values.get("positive_reviews", []))
-        if v != actual:
-            raise ValueError(f"positive_reviews_count {v} != actual {actual}")
-        return v
-    
-    @field_validator("negative_reviews_count")
-    @classmethod
-    def validate_negative_count(cls, v, values):
-        """negative_reviews_count == len(negative_reviews)"""
-        actual = len(values.get("negative_reviews", []))
-        if v != actual:
-            raise ValueError(f"negative_reviews_count {v} != actual {actual}")
-        return v
     
     @field_validator("sentiment_score")
     @classmethod
