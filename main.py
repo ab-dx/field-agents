@@ -1,5 +1,6 @@
 import asyncio
 from agents.customer_reviews_agent import agent
+from entities.customer_reviews import CustomerReviewReport
 
 async def main():
 
@@ -13,8 +14,8 @@ async def main():
     # Wait for final result
     result = await handler
     print(result)
-    print(f"✅ Success: {result.success}")
-    print(f"📝 Reason: {result.reason}")
+    report = CustomerReviewReport(reviews=result.reviews)
+    print(report)
 
 if __name__ == "__main__":
     asyncio.run(main())
