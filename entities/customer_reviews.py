@@ -20,11 +20,27 @@ class CustomerReviewReport(BaseModel):
         return mean(r.csat_score for r in self.reviews)
 
     @computed_field
-    def avg_nps(self) -> float:
-        return mean(r.nps_score for r in self.reviews)
+    def avg_nps_rating(self) -> float:
+        if not self.reviews:
+            return 0.0
+        return round(mean(r.nps_score for r in self.reviews), 2)
+
+    @computed_field
+    def nps(self) -> float:
+        if not self.reviews:
+            return 0.0
+
+        ratings = [int(r.nps_score) for r in self.reviews]
+        total = len(ratings)
+
+        promoters = sum(1 for x in ratings if x >= 9)
+        detractors = sum(1 for x in ratings if x <= 6)
+
+        return round(((promoters / total) - (detractors / total)) * 100, 2)
 
     @computed_field
     def data_quality(self) -> float:
         avg_conf = mean(r.llm_content.extraction_confidence for r in self.reviews)
         completeness = min(len(self.reviews) / 5, 1.0)
         return (avg_conf * 0.7) + (completeness * 0.3)
+

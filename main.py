@@ -13,7 +13,7 @@ async def main():
         result = await handler
         print(result)
         structured_output = getattr(result, "structured_output", result)
-
+    
         if hasattr(structured_output, "avg_star_rating"):
             print("Average star ratings:", structured_output.avg_star_rating)
 

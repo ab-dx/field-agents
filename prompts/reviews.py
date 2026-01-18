@@ -12,12 +12,14 @@ TASK: Collect maximum customer reviews for "{app}" on {platform}
 def fetch_reviews_reddit(app: str) -> str:
     return review_template.format(app=app, platform="Reddit app") + """
 - Capture upvotes if visible
+- calculate sentiment, csat, and nps for each review using the given function
 """
 
 def fetch_reviews_x(app: str) -> str:
     return review_template.format(app=app, platform="X (Twitter) app") + """
 - Prefer recent posts
 - Capture likes/reposts/replies if visible
+- calculate sentiment, csat, and nps for each review using the given function
 """
 
 def fetch_reviews_playstore(app: str) -> str:
@@ -27,6 +29,7 @@ def fetch_reviews_playstore(app: str) -> str:
   2) number of downloads/installs (the range shown)
   3) overall app rating
 - Capture star rating for each review if visible
+- calculate sentiment using the given function, and nps from csat/star_rating using the given function for each review 
 """
 
 def fetch_reviews_app(app: str, platform: str) -> str:
