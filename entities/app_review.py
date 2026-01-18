@@ -17,8 +17,6 @@ class RedditCustomerReview(CustomerReview):
 
 class PlayStoreCustomerReview(CustomerReview):
     platform: Literal["playstore"] = "playstore"
-    no_of_reviews: Optional[int] = Field(None, ge=0)
-    no_of_downloads: Optional[int] = Field(None, ge=0)
     star_rating: float = Field(ge=1, le=5)
     created_at: Optional[datetime] = None
 
@@ -35,6 +33,10 @@ class RedditReviewList(BaseModel):
 
 
 class PlayStoreReviewList(BaseModel):
+    app_name: Optional[str] = None
+    no_of_reviews: Optional[int] = Field(None, ge=0)
+    no_of_downloads: Optional[int] = Field(None, ge=0)
+    avg_star_rating: Optional[float] = Field(None, ge=1, le=5)
     reviews: List[PlayStoreCustomerReview]
 
 
