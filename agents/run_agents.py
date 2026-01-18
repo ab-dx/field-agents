@@ -24,11 +24,11 @@ async def run_agents():
             report = CustomerReviewReport(reviews=structured_output.reviews)
             print(report.model_dump_json(indent=2))
             state.add_report(report.model_dump_json())
-            state.update_kpi(f"{src} Sentiment Score", report.sentiment_score)
-            state.update_kpi(f"{src} Customer Satisfaction", report.avg_csat)
-            state.update_kpi(f"{src} Average NPS Rating", report.avg_nps_rating)
-            state.update_kpi(f"{src} NPS", report.nps)
-            state.update_kpi(f"{src} Data Quality", report.data_quality)
+            state.update_kpi(f"{src} Sentiment Score", report.sentiment_score())
+            state.update_kpi(f"{src} Customer Satisfaction", report.avg_csat())
+            state.update_kpi(f"{src} Average NPS Rating", report.avg_nps_rating())
+            state.update_kpi(f"{src} NPS", report.nps())
+            state.update_kpi(f"{src} Data Quality", report.data_quality())
 
 def launch_agents(query):
     if len(query) == 0:
