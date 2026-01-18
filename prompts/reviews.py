@@ -32,6 +32,30 @@ def fetch_reviews_playstore(app: str) -> str:
 - calculate sentiment using the given function, and nps from csat/star_rating using the given function for each review 
 """
 
+
+def fetch_reviews_glassdoor(company: str) -> str:
+    return review_template.format(app=company, platform="Glassdoor company") + """
+- Also collect company-level stats from Glassdoor overview:
+  1) overall_star_rating (1-5★)
+  2) no_of_reviews (total review count)  
+  3) recommend_to_friend_pct (% recommend)
+  4) ceo_approval_pct (% CEO approval)
+  
+- Navigate tabs and capture for each item:
+  1) Reviews tab → GlassdoorEmployeeReview (star_rating, pros, cons, likes)
+  2) Salaries tab → GlassdoorEmployeeSalary (base_salary, star_rating, jobs) 
+  3) Benefits tab → GlassdoorEmployeeBenifit (benifit, star_rating, likes)
+  
+- For each review/salary/benefit:
+  - Capture star_rating if visible
+  - Calculate sentiment using vader_sentiment_tool() on text fields (pros, cons, post)
+  - Convert sentiment → employee_satisfaction using sentiment_to_employee_satisfaction()
+  - Convert sentiment → recommend_score using sentiment_to_eNPS_rating()
+  - Set eNPS_score from recommend_to_friend_pct conversion: ((pct/100)*200)-100
+"""
+
+
+
 def fetch_reviews_app(app: str, platform: str) -> str:
     platform = platform.lower().strip()
     if platform == "reddit":
@@ -40,7 +64,9 @@ def fetch_reviews_app(app: str, platform: str) -> str:
         return fetch_reviews_playstore(app)
     if platform == "x":
         return fetch_reviews_x(app)
-    raise ValueError("platform must be: reddit | playstore | x")
+    if platform == "glassdoor":
+        return fetch_reviews_glassdoor(company = app)
+    raise ValueError("platform must be: reddit | playstore | x | glassdoor")
 
 
 if __name__ == "__main__":

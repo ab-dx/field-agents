@@ -9,7 +9,46 @@ class CustomerReview(RawReview):
     csat_score: int = Field(ge=1, le=5, description="Customer satisfaction 1-5")
     nps_score: int = Field(ge=0, le=10, description="Net Promoter Score 0-10")
 
+class EmployeeReview(RawReview):
+    esat_score: int = Field(ge=1, le=5, description="1-5★ Employee satisfaction") 
+    enps_score: int = Field(ge=-100, le=100, description="Employee Net Promoter Score")
+    recommend_score: int = Field(ge=0, le=10, description="0-10 Recommend to colleague")
 
+
+class GlassdoorEmployeeReview(EmployeeReview):
+    platform: Literal["glassdoor"] = "glassdoor"
+    star_rating: Optional[float] = Field(ge=1, le=5)
+    pros: Optional[List[str]] = []
+    cons: Optional[List[str]] = []
+    likes: Optional[int] = Field(None, ge=0)
+
+class GlassdoorEmployeeSalary(EmployeeReview):
+    platform: Literal["glassdoor"] = "glassdoor"
+    post: Optional[str] = None
+    base_salary: Optional[int] = Field(None, ge=0)
+    star_rating: Optional[float] = Field(ge=1, le=5)
+    jobs: Optional[int] = Field(None, ge=0)
+
+class GlassdoorEmployeeBenifit(EmployeeReview):
+    platform: Literal["glassdoor"] = "glassdoor"
+    benifit: Optional[str] = None
+    star_rating: Optional[float] = Field(ge=1, le=5)
+    likes: Optional[int] = Field(None, ge=0)
+    
+    
+    
+class GlassdoorEmployeeReviewList(BaseModel):
+    company: Optional[str] = None
+    no_of_reviews: Optional[int] = Field(None, ge=0)
+    overall_star_rating: Optional[float] = Field(ge=1, le=5)
+    recommend_to_friend_pct: Optional[float] = Field(ge=0, le=100)
+    ceo_approval_pct: Optional[float] = Field(ge=0, le=100)
+    reviews: List[GlassdoorEmployeeReview] = []
+    salaries: List[GlassdoorEmployeeSalary] = []
+    benifits: List[GlassdoorEmployeeBenifit] = []
+    
+    
+    
 class RedditCustomerReview(CustomerReview):
     platform: Literal["reddit"] = "reddit"
     upvotes: Optional[int] = Field(None, ge=0)
@@ -26,8 +65,7 @@ class XCustomerReview(CustomerReview):
     likes: Optional[int] = Field(None, ge=0)
     reposts: Optional[int] = Field(None, ge=0)
     replies: Optional[int] = Field(None, ge=0)
-
-
+    
 class RedditReviewList(BaseModel):
     reviews: List[RedditCustomerReview]
 

@@ -1,17 +1,17 @@
 from droidrun import DroidAgent, DroidrunConfig, AgentConfig
 from llama_index.llms.google_genai import GoogleGenAI
 from dotenv import load_dotenv
-from entities.app_review import RedditReviewList, PlayStoreReviewList, XReviewList
+from entities.app_review import RedditReviewList, PlayStoreReviewList, XReviewList, GlassdoorEmployeeReviewList
 from prompts.reviews import fetch_reviews_app
 from state.state import AppState
-from tools.compute_sentiments import TOOLS_REDDIT_X, TOOLS_PLAYSTORE
+from tools.compute_sentiments import TOOLS_REDDIT_X, TOOLS_PLAYSTORE, TOOLS_GLASSDOOR
 
 load_dotenv()
 config = DroidrunConfig(AgentConfig(reasoning=True, max_steps=100))
 llm = GoogleGenAI(model="models/gemini-2.5-flash", temperature=0.8)
 
 def create_agents():
-    return list(zip(["Reddit, PlayStore, X"], [DroidAgent(
+    return list(zip(["Reddit, PlayStore, X, Glassdoor"], [DroidAgent(
             goal=fetch_reviews_app(AppState.instance().get_target(), "reddit"),
             config=config,
             output_model=RedditReviewList,
@@ -32,6 +32,13 @@ def create_agents():
             output_model=XReviewList,
             llms=llm,
             custom_tools=TOOLS_REDDIT_X,
+        ),
+        DroidAgent(
+                goal=fetch_reviews_app(AppState.instance().get_target(), "reddit"),
+                config=config,
+                output_model=GlassdoorEmployeeReviewList,
+                llms=llm,
+                custom_tools=TOOLS_GLASSDOOR,
         )
     ]))
 
