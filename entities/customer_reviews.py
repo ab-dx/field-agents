@@ -29,8 +29,6 @@ class RawReview(BaseModel):
     review_text: str = Field(min_length=10, max_length=10000)
     review_title: Optional[str] = Field(None, max_length=200)
     star_rating: float = Field(ge=1, le=5)
-    theme: Theme
-    emotion: Emotion
     llm_content: LLMExtractedContent
     sentiment_category: Literal["positive", "neutral", "negative"]
     
