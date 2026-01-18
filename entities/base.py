@@ -20,7 +20,7 @@ class LLMExtractedContent(BaseModel):
     extraction_confidence: float = Field(ge=0, le=1)
 
 class RawReview(BaseModel):
-    review_text: str = Field(min_length=10, max_length=10000)
+    review_text: str = Field(min_length=1, max_length=10000)
     review_title: Optional[str] = Field(None, max_length=200)
     llm_content: LLMExtractedContent
     sentiment_category: Literal["positive", "neutral", "negative"]

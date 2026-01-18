@@ -1,19 +1,15 @@
 from pydantic import BaseModel, Field, computed_field
-from typing import Optional, List, Literal
-from entities.base import RawReview 
+from typing import List, Union
 from statistics import mean
 from datetime import datetime
 
-class CustomerReview(RawReview):
-    csat_score: int = Field(ge=1, le=5, description="Customer satisfaction 1-5")
-    nps_score: int = Field(ge=0, le=10, description="Net Promoter Score 0-10")
+from entities.app_review import (RedditCustomerReview,PlayStoreCustomerReview,XCustomerReview,)
 
-class CustomerReviewList(BaseModel):
-    reviews: List[CustomerReview]
+AnyCustomerReview = Union[RedditCustomerReview, PlayStoreCustomerReview, XCustomerReview]
 
 class CustomerReviewReport(BaseModel):
-    reviews: List[CustomerReview]
-    computed_at: datetime = datetime.now()
+    reviews: List[AnyCustomerReview]
+    computed_at: datetime = Field(default_factory=datetime.now)
 
     @computed_field
     def sentiment_score(self) -> float:
@@ -32,4 +28,3 @@ class CustomerReviewReport(BaseModel):
         avg_conf = mean(r.llm_content.extraction_confidence for r in self.reviews)
         completeness = min(len(self.reviews) / 5, 1.0)
         return (avg_conf * 0.7) + (completeness * 0.3)
-
