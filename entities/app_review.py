@@ -14,7 +14,6 @@ class EmployeeReview(RawReview):
     enps_score: int = Field(ge=-100, le=100, description="Employee Net Promoter Score")
     recommend_score: int = Field(ge=0, le=10, description="0-10 Recommend to colleague")
 
-
 class GlassdoorEmployeeReview(EmployeeReview):
     platform: Literal["glassdoor"] = "glassdoor"
     star_rating: Optional[float] = Field(ge=1, le=5)
@@ -36,9 +35,8 @@ class GlassdoorEmployeeBenifit(EmployeeReview):
     likes: Optional[int] = Field(None, ge=0)
     
     
-    
 class GlassdoorEmployeeReviewList(BaseModel):
-    company: Optional[str] = None
+    comp_name: Optional[str] = None
     no_of_reviews: Optional[int] = Field(None, ge=0)
     overall_star_rating: Optional[float] = Field(ge=1, le=5)
     recommend_to_friend_pct: Optional[float] = Field(ge=0, le=100)
@@ -46,8 +44,6 @@ class GlassdoorEmployeeReviewList(BaseModel):
     reviews: List[GlassdoorEmployeeReview] = []
     salaries: List[GlassdoorEmployeeSalary] = []
     benifits: List[GlassdoorEmployeeBenifit] = []
-    
-    
     
 class RedditCustomerReview(CustomerReview):
     platform: Literal["reddit"] = "reddit"

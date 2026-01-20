@@ -5,7 +5,7 @@ TASK: Collect maximum customer reviews for "{app}" on {platform}
 1. **MAXIMIZE COVERAGE**: Fetch 5-100 reviews (prioritize most recent)
 2. **DIVERSITY**: Mix of ratings (1-5 stars), different dates/authors
 3. **RECENCY**: Focus on last 30-90 days when possible
-4. **RELEVANCE**: Only reviews mentioning company/product
+4. **RELEVANCE**: Strictly Only reviews mentioning company/product and talking about the pros/cons
 5. **MINIMUM ALTERATION**: Return review content as is, or with negligible modifications if required.
 """
 
@@ -28,7 +28,7 @@ def fetch_reviews_playstore(app: str) -> str:
   1) total number of reviews
   2) number of downloads/installs (the range shown)
   3) overall app rating
-- Capture star rating for each review if visible
+- Capture star rating for each review if visible, set that as csat
 - calculate sentiment using the given function, and nps from csat/star_rating using the given function for each review 
 """
 

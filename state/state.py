@@ -65,7 +65,7 @@ class AppState:
         """Get KPI dashboard."""
         md = "**📊 KPIs:**\n\n"
         for name, value in sorted(self.kpis.items()):
-            md += f"**{name.replace('_', ' ').title()}:** {value:.0f}\n\n"
+            md += f"**{name.replace('_', ' ').title()}:** {value:.5f}\n\n"
         md += f"**Total Reports:** {len(self.reports)}\n\n"
         return md
     

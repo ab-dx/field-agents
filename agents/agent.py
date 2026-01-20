@@ -7,25 +7,25 @@ from state.state import AppState
 from tools.compute_sentiments import TOOLS_REDDIT_X, TOOLS_PLAYSTORE, TOOLS_GLASSDOOR
 
 load_dotenv()
-config = DroidrunConfig(AgentConfig(reasoning=True, max_steps=100))
-llm = GoogleGenAI(model="models/gemini-2.5-flash", temperature=0.8)
+config = DroidrunConfig(AgentConfig(reasoning=True, max_steps=50))
+llm = GoogleGenAI(model="models/gemini-2.5-pro", temperature=0.8)
 
 def create_agents():
-    return list(zip(["Reddit, PlayStore, X, Glassdoor"], [DroidAgent(
-            goal=fetch_reviews_app(AppState.instance().get_target(), "reddit"),
-            config=config,
-            output_model=RedditReviewList,
-            llms=llm,
-            custom_tools=TOOLS_REDDIT_X,
-        ),
+    return list(zip(["PlayStore", "Reddit", "X", "Glassdoor"], [
         DroidAgent(
-            goal=fetch_reviews_app(AppState.instance().get_target(), "Playstore"),
+            goal=fetch_reviews_app(AppState.instance().get_target(), "PlayStore"),
             config=config,
             output_model=PlayStoreReviewList,
             llms=llm,
             custom_tools=TOOLS_PLAYSTORE,
         ),
-
+        DroidAgent(
+            goal=fetch_reviews_app(AppState.instance().get_target(), "Reddit"),
+            config=config,
+            output_model=RedditReviewList,
+            llms=llm,
+            custom_tools=TOOLS_REDDIT_X,
+        ),
         DroidAgent(
             goal=fetch_reviews_app(AppState.instance().get_target(), "X"),
             config=config,
@@ -34,7 +34,7 @@ def create_agents():
             custom_tools=TOOLS_REDDIT_X,
         ),
         DroidAgent(
-                goal=fetch_reviews_app(AppState.instance().get_target(), "reddit"),
+                goal=fetch_reviews_app(AppState.instance().get_target(), "GlassDoor"),
                 config=config,
                 output_model=GlassdoorEmployeeReviewList,
                 llms=llm,
